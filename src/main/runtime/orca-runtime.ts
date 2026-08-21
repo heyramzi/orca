@@ -292,6 +292,12 @@ import type {
   JiraIssueUpdate,
   JiraSiteSelection
 } from '../../shared/jira-types'
+import type {
+  ClickUpConnectArgs,
+  ClickUpCreateTaskArgs,
+  ClickUpTaskUpdate,
+  ClickUpWorkspaceSelection
+} from '../../shared/clickup-types'
 import type { LinearCustomViewModel, LinearProjectSummary } from '../../shared/linear/project-types'
 import type { LinearWorkspaceSelection } from '../../shared/linear/workspace-types'
 import type {
@@ -931,6 +937,34 @@ import {
   listTeams as listLinearTeams,
   listTeamsOrThrow as listLinearTeamsOrThrow
 } from '../linear/teams'
+import {
+  connect as connectClickUp,
+  disconnect as disconnectClickUp,
+  getStatus as getClickUpStatus,
+  refreshWorkspaces as refreshClickUpWorkspaces,
+  selectWorkspace as selectClickUpWorkspace,
+  testConnection as testClickUpConnection
+} from '../clickup/client'
+import { listLists as listClickUpLists, listStatuses as listClickUpStatuses } from '../clickup/lists'
+import {
+  listAssignableUsers as listClickUpAssignableUsers,
+  listPriorities as listClickUpPriorities
+} from '../clickup/members'
+import {
+  getTask as getClickUpTask,
+  getTaskComments as getClickUpTaskComments,
+  getTaskSummary as getClickUpTaskSummary
+} from '../clickup/task-detail'
+import {
+  listTasks as listClickUpTasks,
+  searchTasks as searchClickUpTasks,
+  type ClickUpTaskQueryArgs
+} from '../clickup/task-queries'
+import {
+  addTaskComment as addClickUpTaskComment,
+  createTask as createClickUpTask,
+  updateTask as updateClickUpTask
+} from '../clickup/task-mutations'
 import {
   connect as connectJira,
   disconnect as disconnectJira,
@@ -38082,6 +38116,112 @@ export class OrcaRuntimeService {
     siteId?: string
   ): ReturnType<typeof getJiraProjectStatusOrder> {
     return getJiraProjectStatusOrder(projectKey, siteId)
+  }
+
+  // ── ClickUp integration ──
+
+  clickupConnect(args: ClickUpConnectArgs): ReturnType<typeof connectClickUp> {
+    return connectClickUp(args)
+  }
+
+  clickupDisconnect(accountId?: string): { ok: true } {
+    disconnectClickUp(accountId)
+    return { ok: true }
+  }
+
+  clickupSelectWorkspace(
+    workspaceId: ClickUpWorkspaceSelection
+  ): ReturnType<typeof getClickUpStatus> {
+    return selectClickUpWorkspace(workspaceId)
+  }
+
+  clickupStatus(): ReturnType<typeof getClickUpStatus> {
+    return getClickUpStatus()
+  }
+
+  clickupReadStatus(): ReturnType<typeof getClickUpStatus> {
+    return getClickUpStatus()
+  }
+
+  clickupRefreshWorkspaces(): ReturnType<typeof refreshClickUpWorkspaces> {
+    return refreshClickUpWorkspaces()
+  }
+
+  clickupTestConnection(accountId?: string): ReturnType<typeof testClickUpConnection> {
+    return testClickUpConnection(accountId)
+  }
+
+  clickupSearchTasks(
+    args: ClickUpTaskQueryArgs & { query: string },
+    signal?: AbortSignal
+  ): ReturnType<typeof searchClickUpTasks> {
+    return searchClickUpTasks(args, signal)
+  }
+
+  clickupListTasks(args: ClickUpTaskQueryArgs): ReturnType<typeof listClickUpTasks> {
+    return listClickUpTasks(args)
+  }
+
+  clickupGetTask(taskId: string, workspaceId?: string): ReturnType<typeof getClickUpTask> {
+    return getClickUpTask(taskId, workspaceId)
+  }
+
+  clickupLookupTaskSummary(
+    taskId: string,
+    workspaceId: string,
+    signal?: AbortSignal
+  ): ReturnType<typeof getClickUpTaskSummary> {
+    return getClickUpTaskSummary(taskId, workspaceId, signal)
+  }
+
+  clickupTaskComments(
+    taskId: string,
+    workspaceId?: string
+  ): ReturnType<typeof getClickUpTaskComments> {
+    return getClickUpTaskComments(taskId, workspaceId)
+  }
+
+  clickupCreateTask(args: ClickUpCreateTaskArgs): ReturnType<typeof createClickUpTask> {
+    return createClickUpTask(args)
+  }
+
+  clickupUpdateTask(
+    taskId: string,
+    updates: ClickUpTaskUpdate,
+    workspaceId?: string
+  ): ReturnType<typeof updateClickUpTask> {
+    return updateClickUpTask(taskId, updates, workspaceId)
+  }
+
+  clickupAddTaskComment(
+    taskId: string,
+    body: string,
+    workspaceId?: string
+  ): ReturnType<typeof addClickUpTaskComment> {
+    return addClickUpTaskComment(taskId, body, workspaceId)
+  }
+
+  clickupListLists(workspaceId?: string): ReturnType<typeof listClickUpLists> {
+    return listClickUpLists(workspaceId)
+  }
+
+  clickupListStatuses(
+    listId: string,
+    workspaceId?: string
+  ): ReturnType<typeof listClickUpStatuses> {
+    return listClickUpStatuses(listId, workspaceId)
+  }
+
+  clickupListPriorities(): ReturnType<typeof listClickUpPriorities> {
+    return listClickUpPriorities()
+  }
+
+  clickupListAssignableUsers(
+    listId: string,
+    query?: string,
+    workspaceId?: string
+  ): ReturnType<typeof listClickUpAssignableUsers> {
+    return listClickUpAssignableUsers(listId, query, workspaceId)
   }
 
   // ── Browser automation ──

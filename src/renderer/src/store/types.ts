@@ -10,6 +10,7 @@ import type { GitHubSlice } from './slices/github'
 import type { HostedReviewSlice } from './slices/hosted-review'
 import type { LinearSlice } from './slices/linear'
 import type { PreflightSlice } from './slices/preflight'
+import type { ClickUpSlice } from './slices/clickup'
 import type { JiraSlice } from './slices/jira'
 import type { EditorSlice } from './slices/editor'
 import type { StatsSlice } from './slices/stats'
@@ -57,6 +58,7 @@ export type AppState = RepoSlice &
   LinearSlice &
   PreflightSlice &
   JiraSlice &
+  ClickUpSlice &
   EditorSlice &
   StatsSlice &
   MemorySlice &

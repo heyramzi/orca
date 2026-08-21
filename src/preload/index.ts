@@ -2055,6 +2055,105 @@ const api = {
     }): Promise<JiraProjectStatusOrder> => ipcRenderer.invoke('jira:getProjectStatusOrder', args)
   },
 
+  clickup: {
+    connect: (args: {
+      apiToken: string
+    }): Promise<{ ok: true; viewer: unknown } | { ok: false; error: string }> =>
+      ipcRenderer.invoke('clickup:connect', args),
+
+    disconnect: (args?: { accountId?: string }): Promise<void> =>
+      ipcRenderer.invoke('clickup:disconnect', args),
+
+    selectWorkspace: (args: { workspaceId: string }): Promise<unknown> =>
+      ipcRenderer.invoke('clickup:selectWorkspace', args),
+
+    status: (): Promise<unknown> => ipcRenderer.invoke('clickup:status'),
+
+    readStatus: (): Promise<unknown> => ipcRenderer.invoke('clickup:readStatus'),
+
+    refreshWorkspaces: (): Promise<unknown> => ipcRenderer.invoke('clickup:refreshWorkspaces'),
+
+    testConnection: (args?: {
+      accountId?: string
+    }): Promise<{ ok: true; viewer: unknown } | { ok: false; error: string }> =>
+      ipcRenderer.invoke('clickup:testConnection', args),
+
+    searchTasks: (args: {
+      query: string
+      filter?: string
+      limit?: number
+      workspaceId?: string
+      listId?: string
+      requestId?: string
+    }): Promise<unknown[]> => ipcRenderer.invoke('clickup:searchTasks', args),
+
+    cancelSearchTasks: (args: { requestId: string }): Promise<void> =>
+      ipcRenderer.invoke('clickup:cancelSearchTasks', args),
+
+    listTasks: (args?: {
+      filter?: string
+      limit?: number
+      workspaceId?: string
+      listId?: string
+    }): Promise<unknown[]> => ipcRenderer.invoke('clickup:listTasks', args),
+
+    getTask: (args: { taskId: string; workspaceId?: string }): Promise<unknown> =>
+      ipcRenderer.invoke('clickup:getTask', args),
+
+    lookupTaskSummary: (args: {
+      taskId: string
+      workspaceId: string
+      requestId?: string
+    }): Promise<unknown> => ipcRenderer.invoke('clickup:lookupTaskSummary', args),
+
+    cancelTaskSummary: (args: { requestId: string }): Promise<void> =>
+      ipcRenderer.invoke('clickup:cancelTaskSummary', args),
+
+    taskComments: (args: { taskId: string; workspaceId?: string }): Promise<unknown[]> =>
+      ipcRenderer.invoke('clickup:taskComments', args),
+
+    createTask: (args: {
+      workspaceId?: string
+      listId: string
+      name: string
+      description?: string
+      statusName?: string
+      priorityId?: string | null
+      assigneeIds?: string[]
+    }): Promise<
+      | { ok: true; id: string; customId: string | null; url: string }
+      | { ok: false; error: string }
+    > => ipcRenderer.invoke('clickup:createTask', args),
+
+    updateTask: (args: {
+      taskId: string
+      updates: unknown
+      workspaceId?: string
+    }): Promise<{ ok: true } | { ok: false; error: string }> =>
+      ipcRenderer.invoke('clickup:updateTask', args),
+
+    addTaskComment: (args: {
+      taskId: string
+      body: string
+      workspaceId?: string
+    }): Promise<{ ok: true; id: string } | { ok: false; error: string }> =>
+      ipcRenderer.invoke('clickup:addTaskComment', args),
+
+    listLists: (args?: { workspaceId?: string }): Promise<unknown[]> =>
+      ipcRenderer.invoke('clickup:listLists', args),
+
+    listStatuses: (args: { listId: string; workspaceId?: string }): Promise<unknown[]> =>
+      ipcRenderer.invoke('clickup:listStatuses', args),
+
+    listPriorities: (): Promise<unknown[]> => ipcRenderer.invoke('clickup:listPriorities'),
+
+    listAssignableUsers: (args: {
+      listId: string
+      query?: string
+      workspaceId?: string
+    }): Promise<unknown[]> => ipcRenderer.invoke('clickup:listAssignableUsers', args)
+  },
+
   starNag: {
     onShow: (
       callback: (payload?: { mode?: 'gh' | 'web'; surface?: 'card' | 'toast' }) => void
