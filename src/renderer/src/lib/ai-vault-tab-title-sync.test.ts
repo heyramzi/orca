@@ -1,5 +1,9 @@
 import { describe, expect, it, vi } from 'vitest'
-import type { AiVaultSessionTitlesResult } from '../../../shared/ai-vault-session-title'
+import {
+  AI_VAULT_TITLE_AGENTS,
+  type AiVaultSessionTitlesResult,
+  type AiVaultTitleAgent
+} from '../../../shared/ai-vault-session-title'
 import { resolveTerminalTabTitle } from '../../../shared/tab-title-resolution'
 import type { TerminalTab } from '../../../shared/terminal-tab-types'
 import {
@@ -27,12 +31,12 @@ function terminalTab(worktreeId: string, aiVaultTitle?: TerminalTab['aiVaultTitl
   }
 }
 
-function titleResult(agent: 'claude' | 'codex', title: string): AiVaultSessionTitlesResult {
+function titleResult(agent: AiVaultTitleAgent, title: string): AiVaultSessionTitlesResult {
   return { titles: [{ agent, sessionId: `${agent}-session`, title }] }
 }
 
 function makeState(args: {
-  agent?: 'claude' | 'codex'
+  agent?: AiVaultTitleAgent | 'gemini'
   aiVaultTitle?: TerminalTab['aiVaultTitle']
   executionHostId: 'ssh:dev-box' | 'runtime:server-1'
   sleeping?: boolean
@@ -167,7 +171,7 @@ function makeState(args: {
 }
 
 describe('AI Vault tab title sync', () => {
-  it.each(['claude', 'codex'] as const)(
+  it.each(AI_VAULT_TITLE_AGENTS)(
     'projects the canonical %s AI Vault session title',
     async (agent) => {
       const store = makeState({
@@ -214,6 +218,20 @@ describe('AI Vault tab title sync', () => {
         worktreeId: 'folder:folder-1'
       })
     ])
+  })
+
+  it('asks for no title for an agent that only records its first prompt', () => {
+    // Why: a parser without a recorded session name falls back to the first user
+    // message. Routing that into the tab would outrank the generated title,
+    // which derives cleaner text from the same prompt.
+    const store = makeState({
+      agent: 'gemini',
+      executionHostId: 'ssh:dev-box',
+      worktreeId: 'worktree-1',
+      path: '/workspace/albacore'
+    })
+
+    expect(collectAiVaultTitleRequests(store.getState())).toEqual([])
   })
 
   it('retains a recovered sleeping title after its lifecycle record disappears', async () => {

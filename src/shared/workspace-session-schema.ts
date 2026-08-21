@@ -20,6 +20,7 @@ import type { WorkspaceSessionState } from './workspace-session-state-types'
 import { isValidTerminalTabId } from './terminal-tab-id'
 import { parseExecutionHostId, type ExecutionHostId } from './execution-host'
 import { isTuiAgent } from './tui-agent-config'
+import { AI_VAULT_TITLE_AGENTS } from './ai-vault-session-title'
 import { isWorkspaceKey } from './workspace-scope'
 import {
   browserHistoryEntriesSchema,
@@ -28,6 +29,19 @@ import {
 } from './workspace-session-browser-schema'
 import { sleepingAgentSessionsByPaneKeySchema } from './workspace-session-sleeping-agents'
 import { salvagedField, salvagedOptional, salvagingArray, salvagingRecord } from './zod-salvage'
+
+// Why: a build that only knows today's agents must not reject a title a newer
+// build wrote, so an unknown agent lands on `.catch(undefined)` and the tab
+// falls back to its other title sources instead of losing the whole session.
+const aiVaultTitleSchema = z
+  .object({
+    agent: z.enum(AI_VAULT_TITLE_AGENTS),
+    sessionId: z.string(),
+    title: z.string()
+  })
+  .nullable()
+  .optional()
+  .catch(undefined)
 
 // ─── Terminal pane layout (recursive) ───────────────────────────────
 
@@ -79,15 +93,7 @@ const terminalTabSchema = z.object({
   title: z.string(),
   defaultTitle: z.string().optional(),
   generatedTitle: z.string().nullable().optional(),
-  aiVaultTitle: z
-    .object({
-      agent: z.enum(['claude', 'codex']),
-      sessionId: z.string(),
-      title: z.string()
-    })
-    .nullable()
-    .optional()
-    .catch(undefined),
+  aiVaultTitle: aiVaultTitleSchema,
   quickCommandLabel: z.string().nullable().optional(),
   customTitle: z.string().nullable(),
   color: z.string().nullable(),
@@ -128,15 +134,7 @@ const tabSchema = z.object({
   contentType: tabContentTypeSchema,
   label: z.string(),
   generatedLabel: z.string().nullable().optional(),
-  aiVaultTitle: z
-    .object({
-      agent: z.enum(['claude', 'codex']),
-      sessionId: z.string(),
-      title: z.string()
-    })
-    .nullable()
-    .optional()
-    .catch(undefined),
+  aiVaultTitle: aiVaultTitleSchema,
   quickCommandLabel: z.string().nullable().optional(),
   customLabel: z.string().nullable(),
   color: z.string().nullable(),
