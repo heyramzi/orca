@@ -1,9 +1,6 @@
 overrides:
   "@hono/node-server@<1.19.15": ">=1.19.15 <2"
   body-parser@>=2.0.0 <2.3.0: ">=2.3.0 <3"
-  brace-expansion@>=1.0.0 <1.1.12: ">=1.1.12 <2"
-  brace-expansion@>=2.0.0 <2.0.2: ">=2.0.2 <3"
-  brace-expansion@>=3.0.0 <5.0.9: ">=5.0.9 <6"
   fast-uri@>=3.0.0 <3.1.5: ">=3.1.5 <4"
   hono@>=3.8.0 <4.12.34: ">=4.12.34 <5"
   ip-address@<10.3.1: ">=10.3.1 <11"
@@ -11,3 +8,37 @@ overrides:
   js-yaml@>=4.0.0 <4.3.1: ">=4.3.1 <5"
   nanoid@>=3.0.0 <3.3.18: ">=3.3.18 <4"
   postcss@>=8.0.0 <8.5.23: ">=8.5.23 <9"
+  # WHY: security version floors (Dependabot). Range-scoped so a bare
+  # floor does not over-bump a major line.
+  "@babel/core@<7.29.6": ">=7.29.6 <8"
+  "@xmldom/xmldom@<0.8.13": ">=0.8.13 <0.9"
+  # WHY: electron-builder ships app-builder-lib, dmg-builder, builder-util and
+  # the squirrel-windows packer as one lockstep family. Flooring app-builder-lib
+  # alone left electron-builder on 26.8.1 calling createLazyProductionDeps, which
+  # 26.15 removed, and the postinstall died. Move the whole family together.
+  app-builder-lib@<26.15.7: ">=26.15.7 <27"
+  electron-builder@<26.15.7: ">=26.15.7 <27"
+  dmg-builder@<26.15.7: ">=26.15.7 <27"
+  electron-builder-squirrel-windows@<26.15.7: ">=26.15.7 <27"
+  builder-util@<26.15.3: ">=26.15.3 <27"
+  brace-expansion@<1.1.16: ">=1.1.16 <2"
+  brace-expansion@>=2.0.0 <2.1.2: ">=2.1.2 <3"
+  builder-util-runtime@<9.7.0: ">=9.7.0 <10"
+  dompurify@<3.4.13: ">=3.4.13 <4"
+  electron@>=40.0.0-alpha.1 <41.10.3: ">=41.10.3 <42"
+  esbuild@>=0.27.3 <0.28.1: ">=0.28.1 <0.29"
+  form-data@>=4.0.0 <4.0.6: ">=4.0.6 <5"
+  linkify-it@<5.0.2: ">=5.0.2 <6"
+  lodash@<4.18.0: ">=4.18.0 <5"
+  markdown-it@<14.2.0: ">=14.2.0 <15"
+  mermaid@>=11.0.0-alpha.1 <11.16.1: ">=11.16.1 <12"
+  path-to-regexp@>=8.0.0 <8.4.0: ">=8.4.0 <9"
+  picomatch@<2.3.2: ">=2.3.2 <3"
+  picomatch@>=4.0.0 <4.0.4: ">=4.0.4 <5"
+  qs@>=6.11.1 <6.15.2: ">=6.15.2 <7"
+  seroval@<1.5.3: ">=1.5.3 <2"
+  simple-git@<3.36.0: ">=3.36.0 <4"
+  tar@<7.5.18: ">=7.5.18 <8"
+  tmp@<0.2.6: ">=0.2.6 <0.3"
+  uuid@<11.1.1: ">=11.1.1 <12"
+  vite@>=7.0.0 <7.3.5: ">=7.3.5 <8"
