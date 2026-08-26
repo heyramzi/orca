@@ -1,0 +1,4 @@
+feat/auto-generate-terminal-titles
+feat/clickup-task-provider
+parked/tab-titles-agent-session-names
+pr9495

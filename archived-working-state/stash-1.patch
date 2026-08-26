@@ -1,0 +1,61 @@
+diff --git a/AGENTS.md b/AGENTS.md
+index 7f9a1586c..0806238e2 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -2,7 +2,7 @@
+ 
+ ## Code Comments: Document the "Why"
+ 
+-When writing or modifying code driven by a design doc or non-obvious constraint, you **must** add a comment explaining **why** the code behaves the way it does. "What" is visible in the code; "why" is not. Target these categories:
++When writing or modifying code driven by a design doc or non-obvious constraint, add a comment explaining **why** the code behaves that way. "What" is visible in the code; "why" is not. Target these categories:
+ 
+ - Safety constraints (suppressed actions, guarded entry points)
+ - Fallback/error-handling choices and their rationale
+diff --git a/README.md b/README.md
+index 0c30a7d6d..28b36f764 100644
+--- a/README.md
++++ b/README.md
+@@ -62,6 +62,8 @@ If you run multiple Codex accounts to get the best token deal, Orca lets you hot
+ 
+ Orca ships with a built-in browser right inside your worktree. Preview your app as you build, then switch to Design Mode — click any UI element and it lands directly in your AI chat as context. No screenshots, no copy-pasting selectors. Just point at what you want to change and tell the agent what to do.
+ 
++For local browser automation, use `ab` so the session stays in your existing Chrome window and keeps your live cookies and logins.
++
+ <p align="center">
+   <img src="docs/assets/orca-design-mode.gif" alt="Orca Design Mode — click any UI element and drop it into the chat" width="800" />
+ </p>
+@@ -91,4 +93,4 @@ npx skills add https://github.com/stablyai/orca --skill orca-cli
+ 
+ ## Developing
+ 
+-Want to contribute or run locally? See our [CONTRIBUTING.md](CONTRIBUTING.md) guide.
+\ No newline at end of file
++Want to contribute or run locally? See our [CONTRIBUTING.md](CONTRIBUTING.md) guide.
+diff --git a/config/scripts/terminal-e2e-helpers.mjs b/config/scripts/terminal-e2e-helpers.mjs
+index 09266f1fe..53d864f5f 100644
+--- a/config/scripts/terminal-e2e-helpers.mjs
++++ b/config/scripts/terminal-e2e-helpers.mjs
+@@ -25,13 +25,19 @@
+ 
+ import { execFileSync } from 'child_process'
+ 
+-const AGENT_BROWSER = 'agent-browser'
++const AGENT_BROWSER = 'ab'
+ 
+-/** Thin wrapper around `agent-browser --cdp <port> <subcommand>`. */
++/** Thin wrapper around `ab <subcommand>`, preserving the caller-selected CDP port. */
+ function ab(port, args) {
+-  const result = execFileSync(AGENT_BROWSER, ['--cdp', String(port), ...args], {
++  const result = execFileSync(AGENT_BROWSER, args, {
+     encoding: 'utf-8',
+-    timeout: 15_000
++    timeout: 15_000,
++    env: {
++      ...process.env,
++      // Why: `ab` is the supported entrypoint, but this helper still needs to
++      // target the specific CDP port passed in by the caller.
++      CHROME_DEBUG_PORT: String(port)
++    }
+   })
+   return result.trim()
+ }

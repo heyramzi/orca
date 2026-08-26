@@ -1,0 +1,20 @@
+repo: orca-clickup
+archived: 2026-08-26
+remotes:
+fork	https://github.com/heyramzi/orca.git (fetch)
+fork	https://github.com/heyramzi/orca.git (push)
+origin	https://github.com/stablyai/orca.git (fetch)
+origin	https://github.com/stablyai/orca.git (push)
+
+branches:
+feat/auto-generate-terminal-titles upstream= 
+feat/clickup-combined upstream=fork/feat/clickup-combined 
+feat/clickup-task-provider upstream=origin/main [ahead 1, behind 206]
+feat/pane-title-double-click-rename upstream=fork/feat/pane-title-double-click-rename 
+feat/tab-status-emoji upstream=fork/feat/tab-status-emoji 
+fix/sidebar-claude-working-dot upstream=fork/fix/sidebar-claude-working-dot 
+main upstream=origin/main [behind 206]
+parked/tab-titles-agent-session-names upstream= 
+pr9495 upstream= 
+
+HEAD: 775ec0681ebde6eced34fb4ec6e1ee4660589dcc feat/tab-status-emoji
