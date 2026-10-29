@@ -39,8 +39,8 @@ Orca targets macOS, Linux, and Windows. Keep all platform-dependent behavior beh
 
 - **Keyboard shortcuts**: Never hardcode `e.metaKey`. Use a platform check (`navigator.userAgent.includes('Mac')`) to pick `metaKey` on Mac and `ctrlKey` on Linux/Windows. Electron menu accelerators should use `CmdOrCtrl`.
 - **Shortcut labels in UI**: Display `⌘` / `⇧` on Mac and `Ctrl+` / `Shift+` on other platforms.
-- **File paths**: Use `path.join` or Electron/Node path utilities — never assume `/` or `\`.
+- **File paths**: Use `path.join` or Electron/Node path utilities. Never assume `/` or `\`.
 
 ## GitHub CLI Usage
 
-Be mindful of the user's `gh` CLI API rate limit — batch requests where possible and avoid unnecessary calls. All code, commands, and scripts must be compatible with macOS, Linux, and Windows.
+Be mindful of the user's `gh` CLI API rate limit: batch requests where possible and avoid unnecessary calls. All code, commands, and scripts must be compatible with macOS, Linux, and Windows.
