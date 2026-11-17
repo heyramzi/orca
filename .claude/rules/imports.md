@@ -1,0 +1,10 @@
+---
+paths:
+  - "**/*.{ts,tsx,js,jsx,mjs,svelte}"
+---
+<!-- vibekit:rule -->
+<!-- Generated from upsys/kit/ai-doc/rules/. Edit there, then run: node upsys/kit/ai-doc/scripts/sync-agents-core.cjs -->
+
+# Imports
+
+**An app that aliases its own `#src` in `kit.alias` needs `packageImportsOverKitAlias` from `@heyramzi/utils/vite` in its Vite and Vitest configs both.**
